@@ -1,8 +1,12 @@
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
-require('dotenv').config()
+const authorRoutes = require('./routes/authorRoutes')
+const bookRoutes = require('./routes/bookRoutes')
 
 const app = express()
+app.use(authorRoutes)
+app.use(bookRoutes)
 
 const mongoUri = process.env.DB_CONNECTION
 
