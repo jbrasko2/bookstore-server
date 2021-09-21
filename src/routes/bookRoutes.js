@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 
 const Book = mongoose.model('Book')
+const Author = mongoose.model('Author')
 
 const router = express.Router()
 
@@ -33,6 +34,11 @@ router.post('/', async (req, res) => {
   try {
     const book = new Book({ title, year, author })
     await book.save()
+    await Author.findByIdAndUpdate(
+      author,
+      { $push: { books: book } },
+      { new: true, useFindAndModify: false }
+    )
     res.send(book)
   } catch (err) {
     res.status(422).send({ error: err.message })
@@ -71,6 +77,5 @@ router.delete('/:bookId', (req, res) => {
     res.status(422).send({ error: err.message })
   }
 })
-
 
 module.exports = router
