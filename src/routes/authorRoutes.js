@@ -50,9 +50,15 @@ router.patch('/:authorId', async (req, res) => {
   res.send(`Updating ${author}`)
 })
 
-router.delete('/:authorId', async (req, res) => {
+router.delete('/:authorId', (req, res) => {
   const id = req.params.authorId
-  Author.remove({ _id: id })
+
+  try {
+    Author.findByIdAndDelete(id)
+    res.send('Deleted')
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
 })
 
 module.exports = router
