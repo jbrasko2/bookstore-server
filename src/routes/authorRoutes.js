@@ -39,4 +39,18 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.patch('/:authorId', async (req, res) => {
+  const id = req.params.authorId
+  const author = await Author.find({ _id: id})
+  
+  res.send(`Updating ${author}`)
+})
+
+router.patch('/:authorId', async (req, res) => {
+  const id = req.params.authorId
+  const author = await Author.find({ _id: id})
+  
+  res.send(`Deleting ${author}`)
+})
+
 module.exports = router
