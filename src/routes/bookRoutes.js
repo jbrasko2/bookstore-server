@@ -14,6 +14,13 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/:bookId', (req, res) => {
+  const id = req.params.bookId
+  const book = await Book.find({ _id: id})
+
+  res.send(book)
+})
+
 router.post('/', async (req, res) => {
   const { title, year } = req.body
 
@@ -29,5 +36,7 @@ router.post('/', async (req, res) => {
     res.status(422).send({ error: err.message })
   }
 })
+
+
 
 module.exports = router
