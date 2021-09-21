@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:bookId', (req, res) => {
+router.get('/:bookId', async (req, res) => {
   const id = req.params.bookId
   const book = await Book.find({ _id: id})
 
@@ -22,14 +22,14 @@ router.get('/:bookId', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { title, year } = req.body
+  const { title, year, author } = req.body
 
-  if (!title || !year) {
-    return res.status(422).send({ error: 'You must provide a title and year' })
+  if (!title || !year || !author) {
+    return res.status(422).send({ error: 'You must provide a title, author and year' })
   }
 
   try {
-    const book = new Book({ title, year, authorId: req.author._id })
+    const book = new Book({ title, year, author })
     await book.save()
     res.send(book)
   } catch (err) {
