@@ -22,16 +22,16 @@ router.get('/:bookId', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { title, year, authorId } = req.body
+  const { title, year, author } = req.body
 
-  if (!title || !year || !authorId) {
+  if (!title || !year || !author) {
     return res
       .status(422)
       .send({ error: 'You must provide a title, author and year' })
   }
 
   try {
-    const book = new Book({ title, year, authorId })
+    const book = new Book({ title, year, author })
     await book.save()
     res.send(book)
   } catch (err) {
@@ -41,9 +41,9 @@ router.post('/', async (req, res) => {
 
 router.patch('/:bookId', async (req, res) => {
   const id = req.params.bookId
-  const { title, year, authorId } = req.body
+  const { title, year, author } = req.body
 
-  if (!title || !year || !authorId) {
+  if (!title || !year || !author) {
     return res
       .status(422)
       .send({ error: 'You must provide a title, author and year' })
@@ -53,7 +53,7 @@ router.patch('/:bookId', async (req, res) => {
     const book = await Book.findById(id)
     book.title = title
     book.year = year
-    book.authorId = authorId
+    book.author = author
     book.save()
     res.send(book)
   } catch (err) {
