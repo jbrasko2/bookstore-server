@@ -39,4 +39,26 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.patch('/:bookId', async (req, res) => {
+  const id = req.params.bookId
+  const { title, year, authorId } = req.body
+
+  if (!title || !year || !authorId) {
+    return res
+      .status(422)
+      .send({ error: 'You must provide a title, author and year' })
+  }
+
+  try {
+    const book = await Book.findById(id)
+    book.title = title
+    book.year = year
+    book.authorId = authorId
+    book.save()
+    res.send(book)
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
+})
+
 module.exports = router
