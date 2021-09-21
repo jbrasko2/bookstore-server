@@ -14,6 +14,13 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/:authorId', async (req, res) => {
+  const id = req.params.authorId
+  const author = await Author.find({ _id: id})
+
+  res.send(author)
+})
+
 router.post('/', async (req, res) => {
   const { name, dob } = req.body
 
