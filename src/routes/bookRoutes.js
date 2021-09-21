@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   try {
-    const books = await Book.find().populate('author')
+    const books = await Book.find().populate('author', 'name')
     res.send(books)
   } catch (err) {
     res.status(422).send({ error: err.message })
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:bookId', async (req, res) => {
   const id = req.params.bookId
-  const book = await Book.findById(id).populate('author')
+  const book = await Book.findById(id).populate('author', 'name')
 
   res.send(book)
 })
