@@ -8,8 +8,8 @@ const bookRoutes = require('./routes/bookRoutes')
 
 const app = express()
 app.use(express.json())
-app.use(authorRoutes)
-app.use(bookRoutes)
+app.use('/authors', authorRoutes)
+app.use('/books', bookRoutes)
 
 const mongoUri = process.env.DB_CONNECTION
 

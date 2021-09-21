@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/books', async (req, res) => {
+router.post('/', async (req, res) => {
   const { title, year } = req.body
 
   if (!title || !year) {

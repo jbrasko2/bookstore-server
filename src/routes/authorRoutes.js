@@ -5,7 +5,7 @@ const Author = mongoose.model('Author')
 
 const router = express.Router()
 
-router.get('/authors', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const authors = await Author.find()
     res.send(authors)
@@ -14,7 +14,7 @@ router.get('/authors', async (req, res) => {
   }
 })
 
-router.post('/authors', async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, dob } = req.body
 
   if (!name || !dob) {
