@@ -45,9 +45,23 @@ router.post('/', async (req, res) => {
 
 router.patch('/:authorId', async (req, res) => {
   const id = req.params.authorId
-  const author = await Author.find({ _id: id })
+  const { name, dob } = req.body
 
-  res.send(`Updating ${author}`)
+  if (!name || !dob) {
+    return res
+      .status(422)
+      .send({ error: 'You must provide a name and date of birth' })
+  }
+
+  try {
+    const author = await Author.findById(id)
+    author.name = name
+    author.dob = dob
+    author.save()
+    res.send(author)
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
 })
 
 router.delete('/:authorId', (req, res) => {
