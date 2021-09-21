@@ -46,7 +46,7 @@ router.patch('/:authorId', async (req, res) => {
   res.send(`Updating ${author}`)
 })
 
-router.patch('/:authorId', async (req, res) => {
+router.delete('/:authorId', async (req, res) => {
   const id = req.params.authorId
   const author = await Author.find({ _id: id})
   
