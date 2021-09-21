@@ -5,8 +5,13 @@ const Author = mongoose.model('Author')
 
 const router = express.Router()
 
-router.get('/authors', (req, res) => {
-  res.send('Authors page')
+router.get('/authors', async (req, res) => {
+  try {
+    const authors = await Author.find()
+    res.send(authors)
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
 })
 
 router.post('/authors', async (req, res) => {
