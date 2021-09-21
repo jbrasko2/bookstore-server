@@ -5,6 +5,15 @@ const Book = mongoose.model('Book')
 
 const router = express.Router()
 
+router.get('/', async (req, res) => {
+  try {
+    const books = await Book.find()
+    res.send(books)
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
+})
+
 router.post('/books', async (req, res) => {
   const { title, year } = req.body
 
