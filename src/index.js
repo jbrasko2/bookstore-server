@@ -1,10 +1,13 @@
 require('dotenv').config()
+require('./models/Author')
+require('./models/Book')
 const express = require('express')
 const mongoose = require('mongoose')
 const authorRoutes = require('./routes/authorRoutes')
 const bookRoutes = require('./routes/bookRoutes')
 
 const app = express()
+app.use(express.json())
 app.use(authorRoutes)
 app.use(bookRoutes)
 
