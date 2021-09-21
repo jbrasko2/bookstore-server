@@ -7,7 +7,7 @@ const authorSchema = new mongoose.Schema({
   },
   dob: {
     type: Date,
-    require: true,
+    required: true,
     trim: true,
   },
 })
