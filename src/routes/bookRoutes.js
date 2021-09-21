@@ -61,4 +61,16 @@ router.patch('/:bookId', async (req, res) => {
   }
 })
 
+router.delete('/:bookId', (req, res) => {
+  const id = req.params.bookId
+
+  try {
+    Book.findByIdAndDelete(id)
+    res.send('Deleted')
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
+})
+
+
 module.exports = router
