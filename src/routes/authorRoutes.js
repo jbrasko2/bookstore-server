@@ -16,9 +16,13 @@ router.get('/', async (req, res) => {
 
 router.get('/:authorId', async (req, res) => {
   const id = req.params.authorId
-  const author = await Author.find({ _id: id})
 
-  res.send(author)
+  try {
+    const author = await Author.findById(id)
+    res.send(author)
+  } catch (err) {
+    res.status(422).send({ error: err.message })
+  }
 })
 
 router.post('/', async (req, res) => {
@@ -41,15 +45,15 @@ router.post('/', async (req, res) => {
 
 router.patch('/:authorId', async (req, res) => {
   const id = req.params.authorId
-  const author = await Author.find({ _id: id})
-  
+  const author = await Author.find({ _id: id })
+
   res.send(`Updating ${author}`)
 })
 
 router.delete('/:authorId', async (req, res) => {
   const id = req.params.authorId
-  const author = await Author.find({ _id: id})
-  
+  const author = await Author.find({ _id: id })
+
   res.send(`Deleting ${author}`)
 })
 
