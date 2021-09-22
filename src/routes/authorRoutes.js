@@ -57,7 +57,7 @@ router.patch('/:authorId', async (req, res) => {
     const author = await Author.findById(id)
     author.name = name
     author.dob = dob
-    author.save()
+    await author.save()
     res.send(author)
   } catch (err) {
     res.status(422).send({ error: err.message })
