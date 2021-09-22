@@ -108,7 +108,13 @@ exports.book_delete = (req, res) => {
   const id = req.params.bookId
 
   try {
-    Book.findByIdAndDelete(id)
+    Book.findByIdAndDelete(id, function (err, docs) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Deleted : ', docs)
+      }
+    })
     res.send('Deleted')
   } catch (err) {
     res.status(422).send({ error: err.message })

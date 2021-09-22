@@ -64,7 +64,13 @@ exports.author_delete = (req, res) => {
   const id = req.params.authorId
 
   try {
-    Author.findByIdAndDelete(id)
+    Author.findByIdAndDelete(id, function (err, docs) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Deleted : ', docs)
+      }
+    })
     res.send('Deleted')
   } catch (err) {
     res.status(422).send({ error: err.message })
