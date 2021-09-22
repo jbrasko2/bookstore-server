@@ -10,7 +10,7 @@ const authorSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+  books: [{ type: Object, ref: 'Book' }],
 })
 
 mongoose.model('Author', authorSchema)
