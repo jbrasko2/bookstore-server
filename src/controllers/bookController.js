@@ -59,9 +59,9 @@ exports.book_update = async (req, res) => {
   }
 
   if (!author) {
-    const newAuthor = new Author({ name: authorName, dob: Date.now() })
-    await newAuthor.save()
     try {
+      const newAuthor = new Author({ name: authorName, dob: Date.now() })
+      await newAuthor.save()
       const book = await Book.findById(id)
       book.title = title
       book.year = year
