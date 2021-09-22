@@ -60,7 +60,7 @@ router.patch('/:bookId', async (req, res) => {
     book.title = title
     book.year = year
     book.author = author
-    book.save()
+    await book.save()
     res.send(book)
   } catch (err) {
     res.status(422).send({ error: err.message })
