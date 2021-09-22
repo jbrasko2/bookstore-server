@@ -1,78 +1,16 @@
 const express = require('express')
-const mongoose = require('mongoose')
-
-const Author = mongoose.model('Author')
+const authorController = require('../controllers/authorController')
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  try {
-    const authors = await Author.find()
-    res.send(authors)
-  } catch (err) {
-    res.status(422).send({ error: err.message })
-  }
-})
+router.get('/', authorController.authors_get_all)
 
-router.get('/:authorId', async (req, res) => {
-  const id = req.params.authorId
+router.get('/:authorId', authorController.authors_get_one)
 
-  try {
-    const author = await Author.findById(id)
-    res.send(author)
-  } catch (err) {
-    res.status(422).send({ error: err.message })
-  }
-})
+router.post('/', authorController.author_create)
 
-router.post('/', async (req, res) => {
-  const { name, dob } = req.body
+router.patch('/:authorId', authorController.author_update)
 
-  if (!name || !dob) {
-    return res
-      .status(422)
-      .send({ error: 'You must provide a name and date of birth' })
-  }
-
-  try {
-    const author = new Author({ name, dob })
-    await author.save()
-    res.send(author)
-  } catch (err) {
-    res.status(422).send({ error: err.message })
-  }
-})
-
-router.patch('/:authorId', async (req, res) => {
-  const id = req.params.authorId
-  const { name, dob } = req.body
-
-  if (!name || !dob) {
-    return res
-      .status(422)
-      .send({ error: 'You must provide a name and date of birth' })
-  }
-
-  try {
-    const author = await Author.findById(id)
-    author.name = name
-    author.dob = dob
-    await author.save()
-    res.send(author)
-  } catch (err) {
-    res.status(422).send({ error: err.message })
-  }
-})
-
-router.delete('/:authorId', (req, res) => {
-  const id = req.params.authorId
-
-  try {
-    Author.findByIdAndDelete(id)
-    res.send('Deleted')
-  } catch (err) {
-    res.status(422).send({ error: err.message })
-  }
-})
+router.delete('/:authorId', authorController.author_delete)
 
 module.exports = router
