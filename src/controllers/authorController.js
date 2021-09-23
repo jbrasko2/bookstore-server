@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Author = mongoose.model('Author')
+const Book = mongoose.model('Book')
 
 exports.authors_get_all = async (req, res) => {
   try {
@@ -60,8 +61,19 @@ exports.author_update = async (req, res) => {
   }
 }
 
-exports.author_delete = (req, res) => {
+exports.author_delete = async (req, res) => {
   const id = req.params.authorId
+  const author = await Author.findOne({ _id: id }).exec()
+  const authorBooks = author.books
+  authorBooks.map(book => {
+    Book.findByIdAndDelete(book._id, function (err, docs) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Deleted : ', docs)
+      }
+    })
+  })
 
   try {
     Author.findByIdAndDelete(id, function (err, docs) {
