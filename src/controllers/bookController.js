@@ -104,10 +104,15 @@ exports.book_update = async (req, res) => {
   }
 }
 
-exports.book_delete = (req, res) => {
+exports.book_delete = async (req, res) => {
   const id = req.params.bookId
+  const book = await Book.findById(id)
+  const author = await Author.findById(book.author)
 
   try {
+    await Author.findByIdAndUpdate(author._id, {
+      $pull: { books: { _id: book._id } },
+    })
     Book.findByIdAndDelete(id, function (err, docs) {
       if (err) {
         console.log(err)
