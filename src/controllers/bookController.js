@@ -113,7 +113,7 @@ exports.book_delete = async (req, res) => {
     await Author.findByIdAndUpdate(author._id, {
       $pull: { books: { _id: book._id } },
     })
-    Book.findByIdAndDelete(id, function (err, docs) {
+    await Book.findByIdAndDelete(id, function (err, docs) {
       if (err) {
         console.log(err)
       } else {
