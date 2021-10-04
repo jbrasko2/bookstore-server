@@ -1,127 +1,127 @@
-const mongoose = require('mongoose')
-const Book = mongoose.model('Book')
-const Author = mongoose.model('Author')
+const mongoose = require('mongoose');
+const Book = mongoose.model('Book');
+const Author = mongoose.model('Author');
 
 exports.books_get_all = async (req, res) => {
   try {
-    const books = await Book.find().populate('author', 'name')
-    res.send(books)
+    const books = await Book.find().populate('author', 'name');
+    res.send(books);
   } catch (err) {
-    res.status(422).send({ error: err.message })
+    res.status(422).send({ error: err.message });
   }
-}
+};
 
 exports.books_get_one = async (req, res) => {
-  const id = req.params.bookId
-  const book = await Book.findById(id).populate('author', 'name')
+  const id = req.params.bookId;
+  const book = await Book.findById(id).populate('author', 'name');
 
-  res.send(book)
-}
+  res.send(book);
+};
 
 exports.book_create = async (req, res) => {
-  const { title, year, authorName } = req.body
-  let author = await Author.findOne({ name: authorName })
+  const { title, year, authorName } = req.body;
+  let author = await Author.findOne({ name: authorName });
 
   if (!title || !year || !authorName) {
     return res
       .status(422)
-      .send({ error: 'You must provide a title, author and year' })
+      .send({ error: 'You must provide a title, author and year' });
   }
 
   if (!author) {
-    author = new Author({ name: authorName, dob: Date.now() })
-    await author.save()
+    author = new Author({ name: authorName, dob: Date.now() });
+    await author.save();
   }
 
   try {
-    const book = new Book({ title, year, author: author._id })
-    await book.save()
+    const book = new Book({ title, year, author: author._id });
+    await book.save();
     await Author.findByIdAndUpdate(
       author,
       { $push: { books: book } },
       { new: true, useFindAndModify: false }
-    )
-    res.send(book)
+    );
+    res.send(book);
   } catch (err) {
-    res.status(422).send({ error: err.message })
+    res.status(422).send({ error: err.message });
   }
-}
+};
 
 exports.book_update = async (req, res) => {
-  const id = req.params.bookId
-  const { title, year, authorName } = req.body
-  const author = await Author.findOne({ name: authorName })
+  const id = req.params.bookId;
+  const { title, year, authorName } = req.body;
+  const author = await Author.findOne({ name: authorName });
 
   if (!title || !year || !authorName) {
     return res
       .status(422)
-      .send({ error: 'You must provide a title, author and year' })
+      .send({ error: 'You must provide a title, author and year' });
   }
 
   if (!author) {
     try {
-      const newAuthor = new Author({ name: authorName, dob: Date.now() })
-      await newAuthor.save()
-      const book = await Book.findById(id)
-      book.title = title
-      book.year = year
+      const newAuthor = new Author({ name: authorName, dob: Date.now() });
+      await newAuthor.save();
+      const book = await Book.findById(id);
+      book.title = title;
+      book.year = year;
       book.author = {
         _id: newAuthor._id,
         name: newAuthor.name,
-      }
-      await book.save()
+      };
+      await book.save();
       await Author.findByIdAndUpdate(
         newAuthor._id,
         { $push: { books: book } },
         { new: true, useFindAndModify: false }
-      )
-      res.send(book)
+      );
+      res.send(book);
     } catch (err) {
-      res.status(422).send({ error: err.message })
+      res.status(422).send({ error: err.message });
     }
   } else {
     try {
-      const book = await Book.findById(id)
-      book.title = title
-      book.year = year
+      const book = await Book.findById(id);
+      book.title = title;
+      book.year = year;
       book.author = {
         _id: author._id,
         name: author.name,
-      }
-      await book.save()
+      };
+      await book.save();
       await Author.findByIdAndUpdate(author._id, {
         $pull: { books: { _id: book._id } },
-      })
+      });
       await Author.findByIdAndUpdate(
         author._id,
         { $push: { books: book } },
         { new: true, useFindAndModify: false }
-      )
-      res.send(book)
+      );
+      res.send(book);
     } catch (err) {
-      res.status(422).send({ error: err.message })
+      res.status(422).send({ error: err.message });
     }
   }
-}
+};
 
 exports.book_delete = async (req, res) => {
-  const id = req.params.bookId
-  const book = await Book.findById(id)
-  const author = await Author.findById(book.author)
+  const id = req.params.bookId;
+  const book = await Book.findById(id);
+  const author = await Author.findById(book.author);
 
   try {
     await Author.findByIdAndUpdate(author._id, {
       $pull: { books: { _id: book._id } },
-    })
+    });
     await Book.findByIdAndDelete(id, function (err, docs) {
       if (err) {
-        console.log(err)
+        console.log(err);
       } else {
-        console.log('Deleted : ', docs)
+        console.log('Deleted : ', docs);
       }
-    })
-    res.send('Deleted')
+    });
+    res.send('Deleted');
   } catch (err) {
-    res.status(422).send({ error: err.message })
+    res.status(422).send({ error: err.message });
   }
-}
+};

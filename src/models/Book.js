@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema({
   author: {
@@ -14,6 +14,6 @@ const bookSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-})
+});
 
-mongoose.model('Book', bookSchema)
+mongoose.model('Book', bookSchema);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const authorSchema = new mongoose.Schema({
   name: {
@@ -11,6 +11,6 @@ const authorSchema = new mongoose.Schema({
     trim: true,
   },
   books: [{ type: Object, ref: 'Book' }],
-})
+});
 
-mongoose.model('Author', authorSchema)
+mongoose.model('Author', authorSchema);
