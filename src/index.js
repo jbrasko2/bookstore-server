@@ -7,6 +7,12 @@ const mongoose = require('mongoose');
 const authorRoutes = require('./routes/authorRoutes');
 const bookRoutes = require('./routes/bookRoutes');
 
+const app = express();
+app.use(express.json());
+app.use(cors());
+app.use('/authors', authorRoutes);
+app.use('/books', bookRoutes);
+
 const mongoUri = process.env.DB_CONNECTION;
 
 mongoose.connect(mongoUri);
@@ -16,12 +22,6 @@ mongoose.connection.on('connected', () => {
 mongoose.connection.on('error', err => {
   console.log('Error connection to mongo', err);
 });
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.use('/authors', authorRoutes);
-app.use('/books', bookRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello');
