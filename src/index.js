@@ -23,7 +23,18 @@ mongoose.connection.on('error', err => {
   console.log('Error connection to mongo', err);
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello');
+});
 
+app.get('/books', async (req, res) => {
+  try {
+    const authors = await Author.find();
+    res.send(authors);
+  } catch (err) {
+    res.status(422).send({ error: err.message });
+  }
+});
 
 const port = process.env.PORT || 3000;
 
