@@ -7,6 +7,7 @@ exports.books_get_all = async (req, res) => {
     const books = await Book.find().populate('author', 'name');
     res.send(books);
   } catch (err) {
+    console.log('Error getting books')
     res.status(422).send({ error: err.message });
   }
 };
