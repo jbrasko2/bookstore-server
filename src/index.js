@@ -10,7 +10,8 @@ const bookRoutes = require('./routes/bookRoutes');
 const app = express();
 app.use(express.json());
 app.use(cors());
-
+app.use('/authors', authorRoutes);
+app.use('/books', bookRoutes);
 
 const mongoUri = process.env.DB_CONNECTION;
 
@@ -31,6 +32,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log('Listening on Port 3000');
 });
-
-app.use('/authors', authorRoutes);
-app.use('/books', bookRoutes);
